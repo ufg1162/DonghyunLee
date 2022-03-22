@@ -1,13 +1,259 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Global CSS Variables: https://www.w3schools.com/css/css3_variables.asp */
+/* Reference these in your CSS to get the same color as the mockups */
+:root {
+    --sidebar-width: 240px;
+    --text-color: rgb(50, 50, 50);
+    --background-color: #ffffff;
+    --light-background-color: #f4f4f4;
+    --nav-bar-color: #ffffff;
+    --selected-color: rgb(229, 241, 253);
+    --action-text-color: #ffffff;
+    --action-color: rgb(58, 99, 197);
+    --border-color: darkgray;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+ 	background-color: var(--background-color);
+  color: var(--text-color); 
+}
+
+button, input[type=submit]  {
+    cursor: pointer;
+}
+
+textarea:focus, input:focus {
+    outline: none;
+}
+
+
+
+/* Global */
+
+html {
+  height: 100%;
+  overflow: hidden;
+
+}
+
+body, ul, #root, #root>div {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  color: var(--text-color);
+}
+
+/* Sidebar */
+
+.sidebar {
+  width: var(--sidebar-width);
+  border: var(--border-color) 1px solid;
+  float: left;
+  height: 100%;
+
+}
+
+.index-sidebar-header {
+  border-bottom: var(--border-color) 1px solid;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.img {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.sidebar .img {
+  cursor: pointer;
+}
+
+.sidebar .index-sidebar-header .material-icons {
+  padding-right: 5px;
+}
+
+.search {
+  border-bottom: var(--border-color) 1px dotted;
+  display: flex;
+  justify-content: flex-start;
+  padding: 5px;
+  height: 25px;
+}
+
+.search-box {
+  border: none;
+}
+
+.sidebar .search .material-icons {
+  margin-right: 5px;
+}
+
+.sidebar .all-notes .note {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border-bottom: var(--border-color) 1px dotted;
+  cursor: pointer;
+}
+
+.sidebar .all-notes .note:focus {
+  background-color: lightblue;
+}
+
+.sidebar .title{
+  margin: 0;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;  
+  font-weight: 700;
+}
+
+.sidebar .all-notes .date {
+  font-size: 11px;
+}
+
+/* Main */
+
+.main {
+  height: 100%;
+  border: var(--border-color) 1px solid;
+  border-left: none;
+  margin-left: 242px;
+}
+
+.main .actions {
+  height: 39px;
+  border-bottom: var(--border-color) 1px solid;
+}
+
+
+.actions ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.actions li:first-child {
+  display: none;
+}
+
+.actions li {
+  display: inline;
+}
+
+.material-icons {
+  cursor: pointer;
+}
+
+.main .note-page {
+  width: 100%;
+  height: 100%;
+  padding-left: 5px;
+}
+
+[contenteditable] {
+  outline: inherit;
+}
+
+/* Modal Window */
+.modal {
+  display: none;
+  background-color: rgb(0, 0, 0, 0.5);
+  z-index: 1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 10%;
+}
+
+.modal-content {
+  background-color: #f4f4f4;
+  width: 35%;
+  margin: 10% auto 10% auto;
+  border: 1px solid var(--border-color);
+  border-radius: 15px;
+}
+
+.container {
+  padding: 15px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+}
+
+.modal-header span {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.profile-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-box span {
+  font-size: 12px;
+}
+
+.modal input {
+  width: 100%;
+}
+
+.modal-footer {
+  display: flex;
+  margin-top: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-submit {
+  background-color: var(--action-color);
+  border-radius: 10px;
+  color: var(--action-text-color);
+  height: 30px;
+  width: 60px;
+  font-size: 12px;
+  border: none;
+}
+
+/* These rules only apply if the window's max-width is 500px or less */
+@media all and (max-width: 500px) {
+  .sidebar {
+    display: none;
+  }
+
+  .actions li:first-child {
+    display: block;
+  }
+
+  .main {
+    width: 100%;
+    margin: 0;
+  }
+
+  .modal{
+    padding: 0;
+  }
+
+  .modal-content {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
 }
