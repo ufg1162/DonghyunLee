@@ -14,7 +14,7 @@ function Main(props) {
                 </ul>
             </div>
             <div className='note-page'>
-                <Text note_list={props.note_list} textRef={props.textRef}/>
+                <Text note_list={props.note_list} current={props.current} textChange={props.textChange} findIndex={props.findIndex}/>
                 <div className='tags'>
                     <Tags current={props.current} handleAddition={props.handleAddition} handleDelete={props.handleDelete}
                     tags={props.tags} handleDrag={props.handleDrag}/>
