@@ -13,20 +13,23 @@ function App() {
         }
     }
 
-    const [note_list, setNote_list] = useState([
-        {
-            id: "note1",
-            text: 'This is a note with a long line of text.',
-            date: '3/7/2022, 6:12:47 PM',
-            tags: []
-        },
-        {   
-            id: "note0",
-            text: 'Sample Note',
-            date: '3/7/2022, 5:58:23 PM',
-            tags:[]
-        }
-    ]);
+    const [note_list, setNote_list] = useState(() => {
+        const local = localStorage.getItem("note_list");
+        return local ? JSON.parse(local) : [
+            {
+                id: "note1",
+                text: 'This is a note with a long line of text.',
+                date: '3/7/2022, 6:12:47 PM',
+                tags: []
+            },
+            {   
+                id: "note0",
+                text: 'Sample Note',
+                date: '3/7/2022, 5:58:23 PM',
+                tags:[]
+            }
+        ];
+    });
     
     const [note_num, setNote_num] = useState(2);
     const [current, setCurrent] = useState('');
@@ -69,7 +72,7 @@ function App() {
     }
 
     useEffect(() => {if (current !== '') {showNote(current)}}, [note_list]);
-    
+    useEffect(() => {localStorage.setItem("note_list", JSON.stringify(note_list))}, [note_list]);
     const addNote = () => {
         const note = {
             text: '',
@@ -78,7 +81,7 @@ function App() {
             tags: []
         }
         note.text = '';
-        const date = <GetDate/>;
+        const date = GetDate();
         note.date = date;
         note.id = "note" + note_num;
         const newList = [note, ...note_list];
