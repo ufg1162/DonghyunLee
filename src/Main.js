@@ -1,5 +1,6 @@
 import Icons from './Icons'
 import Text from './Text'
+import Tags from './Tags';
 
 function Main(props) {
     return(
@@ -14,6 +15,10 @@ function Main(props) {
             </div>
             <div className='note-page'>
                 <Text note_list={props.note_list} textRef={props.textRef}/>
+                <div className='tags'>
+                    <Tags current={props.current} handleAddition={props.handleAddition} handleDelete={props.handleDelete}
+                    tags={props.tags} handleDrag={props.handleDrag}/>
+                </div>
             </div>
         </div>
     );

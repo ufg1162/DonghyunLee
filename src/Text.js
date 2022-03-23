@@ -1,6 +1,6 @@
 function Text({note, textRef}) {
     return (
-        <p contentEditable='false' ref={textRef}></p>
+        <p contentEditable='false' ref={textRef} ></p>
     );
 }
 
