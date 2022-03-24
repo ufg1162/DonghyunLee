@@ -1,18 +1,14 @@
-
 import AllNotes from './AllNotes';
 import Icons from './Icons' 
-import Image from './Image'
+import image from "./dog.jpg"
 
 
 function Sidebar(props) {
-    const open_modal = (e) => 
-    {document.getElementById('id01').style.display = 'block'};
-
     
-    return (
+    return (    
         <div className='sidebar'>
             <div className='index-sidebar-header'>
-                <Image click={open_modal}/>
+                <img className="img" alt="My profile image" onClick={props.openModal} src={image}></img>
                 <span className='my-notes'>My notes</span>
                 <Icons text="note_add" onClick={props.addNote}/>
             </div>

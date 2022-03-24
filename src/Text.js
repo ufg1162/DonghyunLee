@@ -1,4 +1,4 @@
-function Text({ note_list, current, textChange,findIndex }) {
+function Text({ note_list, current, textChange }) {
     if(current !== '') {
         var x;
         note_list.map((item) => {

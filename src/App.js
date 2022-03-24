@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Main from "./Main";
 import Modal from "./Modal";
 import Sidebar from "./Sidebar";
 import GetDate from "./GetDate";
 
 function App() {
-    const modal = document.getElementById('id01');
-
-    window.onclick = function(event) {
-    if (event.target === modal) {
-        modal.style.display = "none";
-        }
-    }
-
     const [note_list, setNote_list] = useState(() => {
         const local = localStorage.getItem("note_list");
         return local ? JSON.parse(local) : [
@@ -30,10 +22,22 @@ function App() {
             }
         ];
     });
+    const [profile, setProfile] = useState(() => {
+        const localProfile = localStorage.getItem("profile");
+        return localProfile ? JSON.parse(localProfile) : {name: '', email: '', color: ''};
+    });
+
+    const inputChange = (event) => {
+        setProfile({...profile, [event.target.name]: event.target.value})
+    }
+    const saveProfile = () => {
+        localStorage.setItem("profile", JSON.stringify(profile));
+    }
     
     const [note_num, setNote_num] = useState(2);
     const [current, setCurrent] = useState('');
     const [tags, setTags] = useState([]);
+    const [show, setShow] = useState(false);
     const findIndex = () => {
         var x;
         note_list.map((item) => {
@@ -66,9 +70,13 @@ function App() {
         setTags(newTags);
         setNote_list([...note_list.slice(0, i), {...note_list[i], tags: newTags,}, ...note_list.slice(i + 1)]);
     };
-    const textChange = (event) =>{
+    const textChange = (event) => {
         var i = findIndex();
         setNote_list([...note_list.slice(0, i), {...note_list[i], text: event.target.value, date: GetDate(),}, ...note_list.slice(i + 1)])
+    }
+
+    const back = () => {
+        setShow(true);
     }
 
     useEffect(() => {if (current !== '') {showNote(current)}}, [note_list]);
@@ -123,11 +131,11 @@ function App() {
 
     return(
         <div id="root-contatiner">
-            <Sidebar addNote={addNote} note_list={note_list} showNote={showNote}/>
+            <Sidebar addNote={addNote} note_list={note_list} showNote={showNote} openModal={() => setShow(true)}/>
             <Main showNote={showNote} note_list={note_list} deleteNote={deleteNote} current={current} tags={tags}
             handleAddition={handleAddition} handleDelete={handleDelete} handleDrag={handleDrag} textChange={textChange}
-            findIndex={findIndex}/>
-            <Modal/>
+            back={back} show={show}/>
+            {show && <Modal profile={profile} inputChange={inputChange} saveProfile={saveProfile} closeModal={() => setShow(false)}/>}
         </div>
     );
 }

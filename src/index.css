@@ -218,7 +218,6 @@ body, ul, #root, #root>div {
 
 /* Modal Window */
 .modal {
-  display: none;
   background-color: rgb(0, 0, 0, 0.5);
   z-index: 1;
   position: fixed;
@@ -298,7 +297,6 @@ body, ul, #root, #root>div {
   }
 
   .main {
-    width: 100%;
     margin: 0;
   }
 

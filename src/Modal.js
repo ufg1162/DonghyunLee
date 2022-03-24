@@ -1,31 +1,40 @@
-import Image from "./Image";
+import { useEffect, useRef, useState } from "react";
+import image from "./dog.jpg"
 
-function Modal(props) {
+function Modal({ profile, inputChange, saveProfile, closeModal }) {
+    const ref = useRef();
 
-    const close_modal = (e) => 
-    {document.getElementById('id01').style.display = 'none'};
+    useEffect(() => {
+        const outClick = (e) => {
+            if(ref.current && !ref.current.contains(e.target)) {
+               closeModal();
+            }
+        };
+        document.addEventListener("click", outClick);
+        return () => {document.removeEventListener("click", outClick)};
+    }, [closeModal])
+
     return(
         <div id="id01" className="modal">
-            <form className="modal-content" action="">
+            <form className="modal-content" action="" ref={ref}>
                 <div className="container">
                     <div className="modal-header">
                         <h3>Edit Profile</h3>
-                        <span className="close" title="Close Modal" onClick={close_modal}>
+                        <span className="close" title="Close Modal" onClick={closeModal}>
                             &times;</span>
                     </div>
 
                     <div className="profile-box">
-                        <Image click={null}></Image>
+                        <img className="img" alt="My profile image" src={image}></img>
                         <span className="profile-add"><b>Add New Image</b></span>
                         <span className="profile-remove"><b>Remove Image</b></span>
                     </div>
-
                     <label htmlFor="name">Name</label><br></br>
-                    <input className="profile-form-input" type="text"></input><br></br>
+                    <input className="profile-form-input" name="name" type="text" value={profile.name} onChange={inputChange}></input><br></br>
                     <label htmlFor="email">Email</label><br></br>
-                    <input className="profile-form-input" type="text"></input><br></br>
+                    <input className="profile-form-input" name="email" type="text" value={profile.email} onChange={inputChange}></input><br></br>
                     <label htmlFor="color-choice">Color Scheme</label><br></br>
-                    <input className="profile-form-input" list="colors" 
+                    <input className="profile-form-input" name="color" value={profile.color} onChange={inputChange} list="colors" 
                     id="color-list"></input><br></br>
                     <datalist id="colors">
                         <option value="Light"></option>
@@ -33,7 +42,7 @@ function Modal(props) {
                     </datalist>
 
                     <div className="modal-footer">
-                        <button type="submit" value="Save" onClick={close_modal}
+                        <button type="submit" value="Save" onClick={saveProfile}
                         className="modal-submit" title="Close Modal">Save</button>
                         <span>Logout</span>
                     </div>
