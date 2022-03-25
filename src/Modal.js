@@ -12,7 +12,7 @@ function Modal({ profile, inputChange, saveProfile, closeModal }) {
         };
         document.addEventListener("click", outClick);
         return () => {document.removeEventListener("click", outClick)};
-    }, [closeModal])
+    })
 
     return(
         <div id="id01" className="modal">

@@ -4,7 +4,7 @@ import Tags from './Tags';
 
 function Main(props) {
     return(
-        <div className='main'>
+        <div className='main' ref={props.mainRef}>
             <div className='actions'>
                 <ul>
                     <li><Icons text="arrow_back" onClick={props.back}></Icons></li>

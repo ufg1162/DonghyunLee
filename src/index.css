@@ -290,6 +290,8 @@ body, ul, #root, #root>div {
 @media all and (max-width: 500px) {
   .sidebar {
     display: none;
+    width: 100%;
+    height: 100%;
   }
 
   .actions li:first-child {

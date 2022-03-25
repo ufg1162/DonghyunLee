@@ -38,6 +38,7 @@ function App() {
     const [current, setCurrent] = useState('');
     const [tags, setTags] = useState([]);
     const [show, setShow] = useState(false);
+    
     const findIndex = () => {
         var x;
         note_list.map((item) => {
@@ -75,8 +76,25 @@ function App() {
         setNote_list([...note_list.slice(0, i), {...note_list[i], text: event.target.value, date: GetDate(),}, ...note_list.slice(i + 1)])
     }
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 500) {
+                sideRef.current.style.display = "block";
+                mainRef.current.style.display = "block";
+            }
+            else {
+                sideRef.current.style.display = "none";
+                mainRef.current.style.display = "block";
+            }
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [])
+    const sideRef = useRef();
+    const mainRef = useRef();
     const back = () => {
-        setShow(true);
+        sideRef.current.style.display = "block";
+        mainRef.current.style.display = "none";
     }
 
     useEffect(() => {if (current !== '') {showNote(current)}}, [note_list]);
@@ -115,6 +133,10 @@ function App() {
         });
         setTags(x.tags);
         setCurrent(x.id);
+        if(window.innerWidth <= 500) {
+            sideRef.current.style.display = "none";
+            mainRef.current.style.display = "block";
+        }
     }
 
     const deleteNote = () => {
@@ -131,10 +153,10 @@ function App() {
 
     return(
         <div id="root-contatiner">
-            <Sidebar addNote={addNote} note_list={note_list} showNote={showNote} openModal={() => setShow(true)}/>
+            <Sidebar addNote={addNote} note_list={note_list} showNote={showNote} openModal={() => setShow(true)} sideRef={sideRef}/>
             <Main showNote={showNote} note_list={note_list} deleteNote={deleteNote} current={current} tags={tags}
             handleAddition={handleAddition} handleDelete={handleDelete} handleDrag={handleDrag} textChange={textChange}
-            back={back} show={show}/>
+            back={back} show={show} mainRef={mainRef}/>
             {show && <Modal profile={profile} inputChange={inputChange} saveProfile={saveProfile} closeModal={() => setShow(false)}/>}
         </div>
     );
