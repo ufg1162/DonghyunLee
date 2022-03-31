@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import image from "./dog.jpg"
+import image from "../dog.jpg"
 
 function Modal({ profile, inputChange, saveProfile, closeModal }) {
     const ref = useRef();

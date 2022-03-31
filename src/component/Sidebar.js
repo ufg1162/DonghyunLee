@@ -1,6 +1,6 @@
 import AllNotes from './AllNotes';
 import Icons from './Icons' 
-import image from "./dog.jpg"
+import image from "../dog.jpg"
 
 
 function Sidebar(props) {

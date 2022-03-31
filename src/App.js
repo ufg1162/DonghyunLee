@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import Main from "./Main";
-import Modal from "./Modal";
-import Sidebar from "./Sidebar";
-import GetDate from "./GetDate";
+import Main from "./component/Main";
+import Modal from "./component/Modal";
+import Sidebar from "./component/Sidebar";
+import GetDate from "./component/GetDate";
 
 function App() {
     const [note_list, setNote_list] = useState(() => {
