@@ -17,7 +17,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const sessionSecret = 'make a secret string';
 
-const sotre = MongoStore.create({
+const store = MongoStore.create({
     mongoUrl: dbURL,
     secret: sessionSecret,
     touchAfter: 24 * 60 * 60
