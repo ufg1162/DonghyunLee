@@ -18,6 +18,15 @@ export const getNoteByIdAPIMethod = (authorId) => {
         .then(parseJSON);
 }
 
+export const createNoteAPIMethod = (note) => {
+    return fetch(`/api/notes`, {
+        ...defaultHeaders,
+        method: 'POST',
+        body: JSON.stringify(note),
+    }).then(checkStatus)
+        .then(parseJSON);
+}
+
 export const updateNoteAPIMethod = (note) => {
     return fetch(`/api/notes/${note._id}`, {
         ...defaultHeaders,
@@ -33,16 +42,6 @@ export const deleteNoteByIdAPIMethod = (noteId) => {
     }).then(checkStatus)
         .then(parseJSON);
 }
-
-export const createNoteAPIMethod = (note) => {
-    return fetch(`/api/notes`, {
-        ...defaultHeaders,
-        method: 'POST',
-        body: JSON.stringify(note),
-    }).then(checkStatus)
-        .then(parseJSON);
-}
-
 
 function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {

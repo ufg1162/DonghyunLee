@@ -11,7 +11,7 @@ function Note({note, showNote}) {
             <p className="title">
                 {text}
             </p>
-            <span className="date">{note.date}</span>
+            <span className="date">{note.lastUpdatedDate}</span>
         </div>
     );
 }

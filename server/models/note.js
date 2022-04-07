@@ -4,9 +4,9 @@ var Schema = mongoose.Schema;
 
 var NoteSchema = new Schema(
     {
-        id: {type: Number},
+        id: {type: String},
         text: {type: String},
-        lastUpdatedDate: {type: Date},
+        lastUpdatedDate: {type: String},
         tags: [],
     }
 );

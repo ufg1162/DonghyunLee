@@ -1,4 +1,6 @@
 function Text({ note_list, current, textChange }) {
+    console.log(current);
+    console.log(note_list);
     if(current !== '') {
         var x;
         note_list.map((item) => {
@@ -6,10 +8,14 @@ function Text({ note_list, current, textChange }) {
                 x = item;
              }
         });
-        var i = note_list.indexOf(x);
-        return(
-            <textarea value={note_list[i].text} onChange={textChange}></textarea>
-        )
+        if(x === undefined) {
+            return null;
+        } else {
+            var i = note_list.indexOf(x);
+            return(
+                <textarea value={note_list[i].text} onChange={textChange}></textarea>
+            )
+        }
     }
     else {
         return null;

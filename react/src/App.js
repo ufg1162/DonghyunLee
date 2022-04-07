@@ -3,25 +3,17 @@ import Main from "./component/Main";
 import Modal from "./component/Modal";
 import Sidebar from "./component/Sidebar";
 import GetDate from "./component/GetDate";
+import {getNotesAPIMethod, createNoteAPIMethod, updateNoteAPIMethod, deleteNoteByIdAPIMethod} from './api/client';
+import {v4 as uuidv4} from 'uuid';
 
 function App() {
-    const [note_list, setNote_list] = useState(() => {
-        const local = localStorage.getItem("note_list");
-        return local ? JSON.parse(local) : [
-            {
-                id: "note1",
-                text: 'This is a note with a long line of text.',
-                date: '3/7/2022, 6:12:47 PM',
-                tags: []
-            },
-            {   
-                id: "note0",
-                text: 'Sample Note',
-                date: '3/7/2022, 5:58:23 PM',
-                tags:[]
-            }
-        ];
-    });
+    const [note_list, setNote_list] = useState([]);
+    useEffect(() => {
+        getNotesAPIMethod().then((notes) => {
+            setNote_list(notes);
+        });
+    }, []);
+
     const [profile, setProfile] = useState(() => {
         const localProfile = localStorage.getItem("profile");
         return localProfile ? JSON.parse(localProfile) : {name: '', email: '', color: ''};
@@ -34,7 +26,6 @@ function App() {
         localStorage.setItem("profile", JSON.stringify(profile));
     }
     
-    const [note_num, setNote_num] = useState(2);
     const [current, setCurrent] = useState('');
     const [tags, setTags] = useState([]);
     const [show, setShow] = useState(false);
@@ -53,12 +44,16 @@ function App() {
         var i = findIndex();
         const newTags = [...tags, tag];
         setTags(newTags);
+        note_list[i].tags = newTags;
+        updateNoteAPIMethod(note_list[i]);
         setNote_list([...note_list.slice(0, i), {...note_list[i], tags: newTags,}, ...note_list.slice(i + 1)]);
       };
     const handleDelete = (i) => {
         var y = findIndex();
         const newTags = tags.filter((tag, index) => index !== i);
         setTags(newTags);
+        note_list[i].tags = newTags;
+        updateNoteAPIMethod(note_list[i]);
         setNote_list([...note_list.slice(0, y), {...note_list[y], tags: newTags,}, ...note_list.slice(y + 1)]);
     };
     const handleDrag = (tag, currPos, newPos) => {
@@ -69,6 +64,8 @@ function App() {
         newTags.splice(newPos, 0, tag);
     
         setTags(newTags);
+        note_list[i].tags = newTags;
+        updateNoteAPIMethod(note_list[i]);
         setNote_list([...note_list.slice(0, i), {...note_list[i], tags: newTags,}, ...note_list.slice(i + 1)]);
     };
     const textChange = (event) => {
@@ -98,21 +95,19 @@ function App() {
     }
 
     useEffect(() => {if (current !== '') {showNote(current)}}, [note_list]);
-    useEffect(() => {localStorage.setItem("note_list", JSON.stringify(note_list))}, [note_list]);
+
     const addNote = () => {
         const note = {
-            text: '',
-            date: '',
             id: '',
+            text: '',
+            lastUpdatedDate: '',
             tags: []
         }
-        note.text = '';
-        const date = GetDate();
-        note.date = date;
-        note.id = "note" + note_num;
-        const newList = [note, ...note_list];
-        setNote_list(newList);
-        setNote_num(note_num + 1);
+        note.id = uuidv4();
+        note.lastUpdatedDate = GetDate();
+        createNoteAPIMethod(note).then(result => {
+            setNote_list([...note_list, result])
+        });
         setCurrent(note.id);
     };
     
@@ -140,7 +135,10 @@ function App() {
     }
 
     const deleteNote = () => {
-        const newList = note_list.filter((note) => note.id !== current)
+        const newList = note_list.filter((note) => note.id !== current);
+        var i = findIndex();
+        const noteId = note_list[i]._id;
+        deleteNoteByIdAPIMethod(noteId)
         setNote_list(newList);
         if (newList.length === 0) {
             setCurrent('');
