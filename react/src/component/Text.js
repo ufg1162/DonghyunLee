@@ -1,6 +1,4 @@
 function Text({ note_list, current, textChange }) {
-    console.log(current);
-    console.log(note_list);
     if(current !== '') {
         var x;
         note_list.map((item) => {

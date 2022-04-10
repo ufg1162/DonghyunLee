@@ -3,27 +3,50 @@ import Main from "./component/Main";
 import Modal from "./component/Modal";
 import Sidebar from "./component/Sidebar";
 import GetDate from "./component/GetDate";
-import {getNotesAPIMethod, createNoteAPIMethod, updateNoteAPIMethod, deleteNoteByIdAPIMethod} from './api/client';
+import {getNotesAPIMethod, createNoteAPIMethod, updateNoteAPIMethod, deleteNoteByIdAPIMethod, getUsersAPIMethod, updateUserAPIMethod, createUserAPIMethod} from './api/client';
 import {v4 as uuidv4} from 'uuid';
 
 function App() {
     const [note_list, setNote_list] = useState([]);
+    const [profile, setProfile] = useState({
+        name: "",
+        email: "",
+        colorScheme: "",
+    });
     useEffect(() => {
         getNotesAPIMethod().then((notes) => {
             setNote_list(notes);
         });
+        getUsersAPIMethod().then((user) => {
+            if (user[0] !== undefined) {
+                setProfile(user[0]);
+            }   else {
+                createUserAPIMethod(profile).then(result => {
+                    setProfile(result);
+                });
+            }
+        });
     }, []);
 
-    const [profile, setProfile] = useState(() => {
-        const localProfile = localStorage.getItem("profile");
-        return localProfile ? JSON.parse(localProfile) : {name: '', email: '', color: ''};
-    });
+    useEffect(() => {
+        note_list.sort((a, b) => {
+            return new Date(b.lastUpdatedDate) - new Date(a.lastUpdatedDate);
+        });
+    }, [note_list]);
 
+
+    const debounce = (func, timeout = 1000) => {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    }
     const inputChange = (event) => {
         setProfile({...profile, [event.target.name]: event.target.value})
     }
     const saveProfile = () => {
-        localStorage.setItem("profile", JSON.stringify(profile));
+        updateUserAPIMethod(profile);
     }
     
     const [current, setCurrent] = useState('');
@@ -70,12 +93,17 @@ function App() {
     };
     const textChange = (event) => {
         var i = findIndex();
-        setNote_list([...note_list.slice(0, i), {...note_list[i], text: event.target.value, date: GetDate(),}, ...note_list.slice(i + 1)])
+        const updatedNote = {...note_list[i], text: event.target.value, lastUpdatedDate: GetDate(),};
+        setNote_list([...note_list.slice(0, i), updatedNote, ...note_list.slice(i + 1)]);
+        updateNoteAPIMethod(updatedNote);
     }
+    const search = (event) => {
 
+    }
+    
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth > 500) {
+            if (window.innerWidth > 500) {  
                 sideRef.current.style.display = "block";
                 mainRef.current.style.display = "block";
             }
@@ -138,7 +166,7 @@ function App() {
         const newList = note_list.filter((note) => note.id !== current);
         var i = findIndex();
         const noteId = note_list[i]._id;
-        deleteNoteByIdAPIMethod(noteId)
+        deleteNoteByIdAPIMethod(noteId);
         setNote_list(newList);
         if (newList.length === 0) {
             setCurrent('');
@@ -151,7 +179,7 @@ function App() {
 
     return(
         <div id="root-contatiner">
-            <Sidebar addNote={addNote} note_list={note_list} showNote={showNote} openModal={() => setShow(true)} sideRef={sideRef}/>
+            <Sidebar addNote={addNote} note_list={note_list} showNote={showNote} openModal={() => setShow(true)} sideRef={sideRef} search={search}/>
             <Main showNote={showNote} note_list={note_list} deleteNote={deleteNote} current={current} tags={tags}
             handleAddition={handleAddition} handleDelete={handleDelete} handleDrag={handleDrag} textChange={textChange}
             back={back} show={show} mainRef={mainRef}/>

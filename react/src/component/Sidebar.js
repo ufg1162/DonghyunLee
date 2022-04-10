@@ -15,7 +15,7 @@ function Sidebar(props) {
 
             <div className='search'>
                 <Icons text="search" onClick={null}/>
-                <input className='search-box' type="text" 
+                <input className='search-box' onChange={props.search} type="text" 
                 placeholder='Search all notes'></input>
             </div>
 

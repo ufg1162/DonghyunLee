@@ -34,7 +34,7 @@ function Modal({ profile, inputChange, saveProfile, closeModal }) {
                     <label htmlFor="email">Email</label><br></br>
                     <input className="profile-form-input" name="email" type="text" value={profile.email} onChange={inputChange}></input><br></br>
                     <label htmlFor="color-choice">Color Scheme</label><br></br>
-                    <input className="profile-form-input" name="color" value={profile.color} onChange={inputChange} list="colors" 
+                    <input className="profile-form-input" name="colorScheme" value={profile.colorScheme} onChange={inputChange} list="colors" 
                     id="color-list"></input><br></br>
                     <datalist id="colors">
                         <option value="Light"></option>

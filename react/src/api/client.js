@@ -43,6 +43,45 @@ export const deleteNoteByIdAPIMethod = (noteId) => {
         .then(parseJSON);
 }
 
+export const getUsersAPIMethod = () => {
+    return fetch(`/api/users`, {
+        ...defaultHeaders,
+    }).then(checkStatus)
+        .then(parseJSON);
+}
+
+export const getUserByIdAPIMethod = (userId) => {
+    return fetch(`/api/users/${userId}`, {
+        ...defaultHeaders,
+    }).then(checkStatus)
+        .then(parseJSON);
+}
+
+export const createUserAPIMethod = (user) => {
+    return fetch(`/api/users`, {
+        ...defaultHeaders,
+        method: 'POST',
+        body: JSON.stringify(user),
+    }).then(checkStatus)
+        .then(parseJSON);
+}
+
+export const updateUserAPIMethod = (user) => {
+    return fetch(`/api/users/${user._id}`, {
+        ...defaultHeaders,
+        method: 'PUT',
+        body: JSON.stringify(user),
+    }).then(checkStatus);
+}
+
+export const deleteUserByIdAPIMethod = (userId) => {
+    return fetch(`/api/users/${userId}`, {
+        ...defaultHeaders,
+        method: 'DELETE',
+    }).then(checkStatus)
+        .then(parseJSON);
+}
+
 function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
         return response;
