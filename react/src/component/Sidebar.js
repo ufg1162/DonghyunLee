@@ -15,12 +15,12 @@ function Sidebar(props) {
 
             <div className='search'>
                 <Icons text="search" onClick={null}/>
-                <input className='search-box' onChange={props.search} type="text" 
-                placeholder='Search all notes'></input>
+                <input className='search-box'  onChange={props.search} type="text" 
+                placeholder='Search all notes' ref={props.searchRef}></input>
             </div>
 
             <div className='all-notes'>
-                <AllNotes note_list={props.note_list} showNote={props.showNote}/>
+                <AllNotes note_list={props.display} showNote={props.showNote}/>
             </div>
         </div>
 

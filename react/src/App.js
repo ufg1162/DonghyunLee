@@ -8,6 +8,7 @@ import {v4 as uuidv4} from 'uuid';
 
 function App() {
     const [note_list, setNote_list] = useState([]);
+    const [display, setDisplay] = useState([]);
     const [profile, setProfile] = useState({
         name: "",
         email: "",
@@ -32,6 +33,7 @@ function App() {
         note_list.sort((a, b) => {
             return new Date(b.lastUpdatedDate) - new Date(a.lastUpdatedDate);
         });
+        setDisplay([...note_list]);
     }, [note_list]);
 
 
@@ -97,9 +99,6 @@ function App() {
         setNote_list([...note_list.slice(0, i), updatedNote, ...note_list.slice(i + 1)]);
         updateNoteAPIMethod(updatedNote);
     }
-    const search = (event) => {
-
-    }
     
     useEffect(() => {
         const handleResize = () => {
@@ -117,12 +116,25 @@ function App() {
     }, [])
     const sideRef = useRef();
     const mainRef = useRef();
+    const searchRef = useRef();
+
     const back = () => {
         sideRef.current.style.display = "block";
         mainRef.current.style.display = "none";
     }
 
-    useEffect(() => {if (current !== '') {showNote(current)}}, [note_list]);
+    const search = (event) => {
+        let search = event.target.value;
+        const searched = [];
+        note_list.map((note) => {
+            if(note.text.includes(search)) {
+                searched.push(note);
+            }
+        });
+        setDisplay(searched);
+    }
+
+    useEffect(() => {if (current !== '') {showNote(current)}}, [display]);
 
     const addNote = () => {
         const note = {
@@ -136,21 +148,36 @@ function App() {
         createNoteAPIMethod(note).then(result => {
             setNote_list([...note_list, result])
         });
+        searchRef.current.value ="";
         setCurrent(note.id);
     };
     
     const showNote = (id) => {
-
+        let curr = id;
+        let exist;
+        display.map((note) => {
+            if(note.id === id) {
+                exist = note;
+            }
+        })
+        if (exist === undefined) {
+            if (display.length !== 0) {
+                curr = display[0].id;
+            }
+            else {
+                return;
+            }
+        }
         const all = document.querySelectorAll(".note");
         for (let i = 0; i < all.length; i++) {
              all[i].style.backgroundColor = "inherit";
         }
 
-        document.getElementById(id).style.backgroundColor = "lightblue";
+        document.getElementById(curr).style.backgroundColor = "lightblue";
         var x;
 
-        note_list.map((item) => {
-            if (item.id === id) {
+        display.map((item) => {
+            if (item.id === curr) {
                 x = item;
              }
         });
@@ -163,23 +190,26 @@ function App() {
     }
 
     const deleteNote = () => {
-        const newList = note_list.filter((note) => note.id !== current);
-        var i = findIndex();
-        const noteId = note_list[i]._id;
-        deleteNoteByIdAPIMethod(noteId);
-        setNote_list(newList);
-        if (newList.length === 0) {
-            setCurrent('');
-        }
-        else {
-           setCurrent(newList[0].id);
+        if (current !== '') {
+            const newList = note_list.filter((note) => note.id !== current);
+            var i = findIndex();
+            const noteId = note_list[i]._id;
+            deleteNoteByIdAPIMethod(noteId);
+            setNote_list(newList);
+            if (newList.length === 0) {
+                setCurrent('');
+            }
+            else {
+               setCurrent(newList[0].id);
+            }
         }
     }
     
 
     return(
         <div id="root-contatiner">
-            <Sidebar addNote={addNote} note_list={note_list} showNote={showNote} openModal={() => setShow(true)} sideRef={sideRef} search={search}/>
+            <Sidebar addNote={addNote} display={display} search={search} showNote={showNote} openModal={() => setShow(true)} 
+            sideRef={sideRef} searchRef={searchRef}/>
             <Main showNote={showNote} note_list={note_list} deleteNote={deleteNote} current={current} tags={tags}
             handleAddition={handleAddition} handleDelete={handleDelete} handleDrag={handleDrag} textChange={textChange}
             back={back} show={show} mainRef={mainRef}/>
