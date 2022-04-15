@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Main from "./component/Main";
 import Modal from "./component/Modal";
 import Sidebar from "./component/Sidebar";
@@ -93,11 +93,15 @@ function App() {
         updateNoteAPIMethod(note_list[i]);
         setNote_list([...note_list.slice(0, i), {...note_list[i], tags: newTags,}, ...note_list.slice(i + 1)]);
     };
+    
+    const textUpdate = useCallback(debounce((note) => {
+        updateNoteAPIMethod(note);  
+    }));
     const textChange = (event) => {
         var i = findIndex();
         const updatedNote = {...note_list[i], text: event.target.value, lastUpdatedDate: GetDate(),};
         setNote_list([...note_list.slice(0, i), updatedNote, ...note_list.slice(i + 1)]);
-        updateNoteAPIMethod(updatedNote);
+        textUpdate(updatedNote);
     }
     
     useEffect(() => {
