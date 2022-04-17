@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 
-var dbURL = process.env.MONGO_URL || 'mongodb://localhost:27017/NoteApp';
+var dbURL = process.env.MONGO_URL || 'mongodb+srv://ufg1162:andy3165412@cluster0.erk4e.mongodb.net/NotesApp';
 mongoose.connect(dbURL, {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
