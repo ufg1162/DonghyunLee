@@ -3,6 +3,7 @@ import Main from "./component/Main";
 import Modal from "./component/Modal";
 import Sidebar from "./component/Sidebar";
 import GetDate from "./component/GetDate";
+import LogIn from "./component/LogIn";
 import {getNotesAPIMethod, createNoteAPIMethod, updateNoteAPIMethod, deleteNoteByIdAPIMethod, getUsersAPIMethod, updateUserAPIMethod, createUserAPIMethod} from './api/client';
 import {v4 as uuidv4} from 'uuid';
 
@@ -54,6 +55,7 @@ function App() {
     const [current, setCurrent] = useState('');
     const [tags, setTags] = useState([]);
     const [show, setShow] = useState(false);
+    const [LoggedIn, setLogIn] = useState(false);
     
     const findIndex = () => {
         var x;
@@ -212,11 +214,12 @@ function App() {
 
     return(
         <div id="root-contatiner">
+            {!LoggedIn && <LogIn/>}
             <Sidebar addNote={addNote} display={display} search={search} showNote={showNote} openModal={() => setShow(true)} 
             sideRef={sideRef} searchRef={searchRef}/>
             <Main showNote={showNote} note_list={note_list} deleteNote={deleteNote} current={current} tags={tags}
             handleAddition={handleAddition} handleDelete={handleDelete} handleDrag={handleDrag} textChange={textChange}
-            back={back} show={show} mainRef={mainRef}/>
+            back={back} mainRef={mainRef}/>
             {show && <Modal profile={profile} inputChange={inputChange} saveProfile={saveProfile} closeModal={() => setShow(false)}/>}
         </div>
     );

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import image from "../dog.jpg"
 
 function Modal({ profile, inputChange, saveProfile, closeModal }) {
