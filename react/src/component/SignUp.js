@@ -1,7 +1,29 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { register } from "../api/client";
 
-function SignUp({ closeModal }) {
+function SignUp({ closeModal, show }) {
     const ref = useRef();
+    const [error, setError] = useState(null);
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+        password: "",
+        profile_img: "",
+        colorScheme: "",
+    })
+
+    const inputChange = (event) => {
+        setUser({...user, [event.target.name]: event.target.value})
+    }
+    const handleRegister = (event) => {
+        event.preventDefault();
+        register(user).then((response) => {
+            setError(null);
+            closeModal();
+        }).catch(err => {
+            setError(err.toLocaleString());
+        })
+    }
 
     useEffect(() => {
         const outClick = (e) => {
@@ -15,7 +37,7 @@ function SignUp({ closeModal }) {
 
     return(
         <div id="SignUp-page">
-            <form className="Signup-sheet" ref={ref}>
+            <form className="Signup-sheet" ref={ref} onSubmit={handleRegister}>
                 <div className="container">
                     <div className="sign-header">
                         <h3>Sign Up</h3>
@@ -23,12 +45,13 @@ function SignUp({ closeModal }) {
                     </div>
 
                     <label>Name</label><br></br>
-                    <input className="signUp-input" name="name" type="text" onChange={null}></input><br></br>
+                    <input className="signUp-input" name="name" type="text" onChange={inputChange}></input><br></br>
                     <label>Email</label><br></br>
-                    <input className="signUp-input" name="email" type="text" onChange={null}></input><br></br>
+                    <input className="signUp-input" name="email" type="text" onChange={inputChange}></input><br></br>
                     <label>Password</label><br></br>
-                    <input className="signUp-input" name="password" type="text" onChange={null}></input><br></br>
-                    <button type="submit" onClick={null}>Sign Up</button>
+                    <input className="signUp-input" name="password" type="text" onChange={inputChange}></input><br></br>
+                    {error && <span>{error}</span>}
+                    <input type="submit" id="submit-signUp" value="Submit"></input>
                 </div>
             </form>
         </div>

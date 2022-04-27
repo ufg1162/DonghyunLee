@@ -13,20 +13,13 @@ function App() {
     const [profile, setProfile] = useState({
         name: "",
         email: "",
+        password: "",
+        profile_img: "",
         colorScheme: "",
     });
     useEffect(() => {
         getNotesAPIMethod().then((notes) => {
             setNote_list(notes);
-        });
-        getUsersAPIMethod().then((user) => {
-            if (user[0] !== undefined) {
-                setProfile(user[0]);
-            }   else {
-                createUserAPIMethod(profile).then(result => {
-                    setProfile(result);
-                });
-            }
         });
     }, []);
 

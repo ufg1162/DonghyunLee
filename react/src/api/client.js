@@ -74,6 +74,14 @@ export const updateUserAPIMethod = (user) => {
     }).then(checkStatus);
 }
 
+export const register = (user) => {
+    return fetch(`/api/register`, {
+        ...defaultHeaders,
+        method: 'POST',
+        body: JSON.stringify(user),
+    }).then(checkStatus)
+        .then(parseJSON);
+}
 
 export const uploadFileForUserAPIMethod = (userId, formData) => {
     return fetch(`/api/authors/${userId}/file`, {

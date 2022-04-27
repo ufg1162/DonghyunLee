@@ -78,6 +78,11 @@ body, ul, #root, #root>div {
   box-sizing: border-box;
 }
 
+#LogIn-page .container span {
+  font-weight: 500;
+  color: red;
+}
+
 #LogIn-page .container .LogIn {
   background-color: var(--action-color);
   border-radius: 10px;
@@ -86,7 +91,7 @@ body, ul, #root, #root>div {
   width: 100%;
   font-size: 12px;
   border: none;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 #LogIn-page hr {
@@ -149,7 +154,7 @@ body, ul, #root, #root>div {
   width: 100%;
 }
 
-#SignUp-page button {
+#SignUp-page #submit-signUp {
   background-color: rgb(23, 175, 23);
   border-radius: 10px;
   color: var(--action-text-color);
