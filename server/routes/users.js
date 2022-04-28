@@ -15,15 +15,6 @@ router.post('/users/:id/file', upload.single('image'), wrapAsync(async function 
     res.json("File uploaded successfully");
 }));
 
-router.post('/users', wrapAsync(async function (req, res) {
-    const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        colorScheme: req.body.colorScheme,
-    })
-    await newUser.save();
-    res.json(newUser);
-}));
 
 router.put('/users/:id', wrapAsync(async function (req, res) {
     const id = req.params.id;

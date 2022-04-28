@@ -57,15 +57,6 @@ export const getUserByIdAPIMethod = (userId) => {
         .then(parseJSON);
 }
 
-export const createUserAPIMethod = (user) => {
-    return fetch(`/api/users`, {
-        ...defaultHeaders,
-        method: 'POST',
-        body: JSON.stringify(user),
-    }).then(checkStatus)
-        .then(parseJSON);
-}
-
 export const updateUserAPIMethod = (user) => {
     return fetch(`/api/users/${user._id}`, {
         ...defaultHeaders,
@@ -81,6 +72,14 @@ export const register = (user) => {
         body: JSON.stringify(user),
     }).then(checkStatus)
         .then(parseJSON);
+}
+
+export const logIn = (user) => {
+    return fetch(`/api/login`, {
+        ...defaultHeaders,
+        method: 'POST',
+        body: JSON.stringify(user),
+    }).then(checkStatus)
 }
 
 export const uploadFileForUserAPIMethod = (userId, formData) => {

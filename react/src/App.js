@@ -207,7 +207,7 @@ function App() {
 
     return(
         <div id="root-contatiner">
-            {!LoggedIn && <LogIn/>}
+            {!LoggedIn && <LogIn setLogIn={setLogIn}/>}
             <Sidebar addNote={addNote} display={display} search={search} showNote={showNote} openModal={() => setShow(true)} 
             sideRef={sideRef} searchRef={searchRef}/>
             <Main showNote={showNote} note_list={note_list} deleteNote={deleteNote} current={current} tags={tags}
