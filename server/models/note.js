@@ -8,6 +8,7 @@ var NoteSchema = new Schema(
         text: {type: String},
         lastUpdatedDate: {type: String},
         tags: [],
+        owner: { type: Schema.Types.ObjectId, ref: 'User', required: true},
     }
 );
 

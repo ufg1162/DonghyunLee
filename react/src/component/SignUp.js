@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
-import { register } from "../api/client";
+import { register, getNotesAPIMethod, getUsersAPIMethod } from "../api/client";
 
-function SignUp({ closeModal, setLogIn }) {
+function SignUp({ closeModal, setLogIn, setNote_list, setProfile }) {
     const ref = useRef();
     const [error, setError] = useState(null);
     const [user, setUser] = useState({
@@ -20,7 +20,6 @@ function SignUp({ closeModal, setLogIn }) {
         register(user).then((response) => {
             setError(null);
             setLogIn(true);
-            closeModal();
         }).catch(err => {
             setError(err.toLocaleString());
         })

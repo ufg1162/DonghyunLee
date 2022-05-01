@@ -2,13 +2,12 @@ import AllNotes from './AllNotes';
 import Icons from './Icons' 
 import image from "../dog.jpg"
 
-
 function Sidebar(props) {
     
     return (    
         <div className='sidebar' ref={props.sideRef}>
             <div className='index-sidebar-header'>
-                <img className="img" alt="My profile image" onClick={props.openModal} src={image}></img>
+                <img className="img" alt="My profile image" onClick={props.openModal} src={props.profile.profile_img || image}></img>
                 <span className='my-notes'>My notes</span>
                 <Icons text="note_add" onClick={props.addNote}/>
             </div>

@@ -1,8 +1,8 @@
 import React, { useState} from "react";
-import { logIn } from "../api/client";
+import { getNotesAPIMethod, getUsersAPIMethod, logIn } from "../api/client";
 import SignUp from "./SignUp";
 
-function LogIn({ setLogIn }) {
+function LogIn({ setLogIn, setNote_list, setProfile }) {
     const [show, setShow] = useState(false);
     const [invalid, setInvalid] = useState(false);
     const [user, setUser] = useState({
@@ -23,7 +23,8 @@ function LogIn({ setLogIn }) {
     }
     return(
         <div id="LogIn-page">
-            {show && <SignUp closeModal={() => setShow(false)} show={() => setShow(true)} setLogIn={setLogIn}/>}
+            {show && <SignUp closeModal={() => setShow(false)} show={() => setShow(true)} setLogIn={setLogIn}
+            setNote_list={setNote_list} setProfile={setProfile}/>}
             <div className="header">
                 <h1>Notes</h1><br></br>
                 <h4>Organize all your thoughts in one place.</h4>

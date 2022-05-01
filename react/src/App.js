@@ -4,24 +4,13 @@ import Modal from "./component/Modal";
 import Sidebar from "./component/Sidebar";
 import GetDate from "./component/GetDate";
 import LogIn from "./component/LogIn";
-import {getNotesAPIMethod, createNoteAPIMethod, updateNoteAPIMethod, deleteNoteByIdAPIMethod, getUsersAPIMethod, updateUserAPIMethod, createUserAPIMethod} from './api/client';
+import {getNotesAPIMethod, createNoteAPIMethod, updateNoteAPIMethod, deleteNoteByIdAPIMethod, updateUserAPIMethod, getUsersAPIMethod, auth} from './api/client';
 import {v4 as uuidv4} from 'uuid';
 
 function App() {
     const [note_list, setNote_list] = useState([]);
     const [display, setDisplay] = useState([]);
-    const [profile, setProfile] = useState({
-        name: "",
-        email: "",
-        password: "",
-        profile_img: "",
-        colorScheme: "",
-    });
-    useEffect(() => {
-        getNotesAPIMethod().then((notes) => {
-            setNote_list(notes);
-        });
-    }, []);
+    const [profile, setProfile] = useState({});
 
     useEffect(() => {
         note_list.sort((a, b) => {
@@ -38,10 +27,7 @@ function App() {
             timer = setTimeout(() => { func.apply(this, args); }, timeout);
         };
     }
-    const inputChange = (event) => {
-        setProfile({...profile, [event.target.name]: event.target.value})
-    }
-    const saveProfile = () => {
+    const saveProfile = (profile) => {
         updateUserAPIMethod(profile);
     }
     
@@ -49,7 +35,25 @@ function App() {
     const [tags, setTags] = useState([]);
     const [show, setShow] = useState(false);
     const [LoggedIn, setLogIn] = useState(false);
-    
+    useEffect(() => {
+        auth().then(result => {
+            setLogIn(result);
+        })
+    }, []);
+
+    useEffect(() => {
+        if (LoggedIn === true) {
+            getNotesAPIMethod().then((result) => {
+                setNote_list(result);
+            })
+            getUsersAPIMethod().then((result) => {
+                setProfile(result[0]);
+            })
+        }
+    }, [LoggedIn])
+
+
+
     const findIndex = () => {
         var x;
         note_list.map((item) => {
@@ -207,13 +211,13 @@ function App() {
 
     return(
         <div id="root-contatiner">
-            {!LoggedIn && <LogIn setLogIn={setLogIn}/>}
+            {!LoggedIn && <LogIn setLogIn={setLogIn} setNote_list={setNote_list} setProfile={setProfile}/>}
             <Sidebar addNote={addNote} display={display} search={search} showNote={showNote} openModal={() => setShow(true)} 
-            sideRef={sideRef} searchRef={searchRef}/>
+            sideRef={sideRef} searchRef={searchRef} profile={profile}/>
             <Main showNote={showNote} note_list={note_list} deleteNote={deleteNote} current={current} tags={tags}
             handleAddition={handleAddition} handleDelete={handleDelete} handleDrag={handleDrag} textChange={textChange}
             back={back} mainRef={mainRef}/>
-            {show && <Modal profile={profile} inputChange={inputChange} saveProfile={saveProfile} closeModal={() => setShow(false)}/>}
+            {show && <Modal profile={profile} saveProfile={saveProfile} closeModal={() => setShow(false)}/>}
         </div>
     );
 }

@@ -82,15 +82,19 @@ export const logIn = (user) => {
     }).then(checkStatus)
 }
 
-export const uploadFileForUserAPIMethod = (userId, formData) => {
-    return fetch(`/api/authors/${userId}/file`, {
-        // We do NOT want to set the default headers – the formData will automatically set the
-        // headers to tell the server of the data type (which is different than the JSON
-        // standard all the other API calls have been sending
+export const logOut = () => {
+    return fetch(`/api/logout`, {
+        ...defaultHeaders,
         method: 'POST',
-        body: formData,
     }).then(checkStatus)
-        .then(parseJSON);
+}
+
+export const auth = () => {
+    return fetch(`/api/auth`, {
+        ...defaultHeaders,
+        method: 'POST'
+    }).then(checkStatus)
+        .then(parseJSON)
 }
 
 export const uploadImageToCloudinaryAPIMethod = (formData) => {

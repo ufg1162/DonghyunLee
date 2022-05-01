@@ -3,24 +3,26 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Note = require('../models/note');
 const {wrapAsync} = require('../utils/helper');
+const {isLoggedIn} = require('../middleware/auth');
 
-router.get('/notes', wrapAsync(async function (req, res) {
-    let notes = await Note.find({});
+router.get('/notes', isLoggedIn, wrapAsync(async function (req, res) {
+    let notes = await Note.find({"owner": req.session.userId});
     res.json(notes);
 }));
 
-router.post('/notes', wrapAsync(async function (req, res) {
+router.post('/notes', isLoggedIn, wrapAsync(async function (req, res) {
     const newNote = new Note({
         id: req.body.id,
         text: req.body.text,
         lastUpdatedDate: req.body.lastUpdatedDate,
         tags: req.body.tags,
+        owner: req.session.userId
     })
     await newNote.save();
     res.json(newNote);
 }));
 
-router.put('/notes/:id', wrapAsync(async function (req, res) {
+router.put('/notes/:id', isLoggedIn, wrapAsync(async function (req, res) {
     const id = req.params.id;
     const {text, lastUpdatedDate, tags} = req.body;
     await Note.findByIdAndUpdate(id, {text, lastUpdatedDate, tags}, 
