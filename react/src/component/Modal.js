@@ -20,7 +20,7 @@ function Modal({ profile, saveProfile, closeModal }) {
         setUser({...user, [event.target.name]: event.target.value})
     }
 
-    const handleImagedelete = () => {
+    const handleImageDelete = () => {
         setUser({...user, "profile_img": ''})
     }
 
@@ -66,10 +66,10 @@ function Modal({ profile, saveProfile, closeModal }) {
                     </div>
 
                     <div className="profile-box">
-                        <label className="profile" htmlFor="file-input"><img className="img" alt="Profile" src={user.profile_img || image}/>
-                        <input className="inputFile" type="file" onChange={handleImageSelected}/><i></i></label>
+                        <label className="profile"><input className="inputFile" type="file" onChange={handleImageSelected}/>
+                        <img className="img" alt="Profile" src={user.profile_img || image}/></label>
                         <label className="profile-add"><input className="inputFile" type="file" onChange={handleImageSelected}/><i></i><b>Add New Image</b></label>
-                        <span className="profile-remove" onClick={handleImageDelete}><b>Remove Image</b></span>
+                        <label className="profile-remove" onClick={handleImageDelete}><b>Remove Image</b></label>
                     </div>
                     <label htmlFor="name">Name</label><br></br>
                     <input className="profile-form-input" name="name" type="text" value={user.name} onChange={inputChange}></input><br></br>

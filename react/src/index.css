@@ -215,8 +215,6 @@ body, ul, #root, #root>div {
 }
 
 .sidebar .all-notes .note {
-  display: flex;
-  flex-direction: column;
   padding: 5px;
   border-bottom: var(--border-color) 1px dotted;
   cursor: pointer;
@@ -237,6 +235,13 @@ body, ul, #root, #root>div {
 
 .sidebar .all-notes .date {
   font-size: 11px;
+
+}
+
+.similar {
+  visibility: hidden;
+  font-size: 11px;
+  float:right;
 }
 
 /* Main */
@@ -389,11 +394,7 @@ input[type="file"] {
   display: none;
 }
 
-.profile-box span {
-  font-size: 12px;
-}
-
-.profile-add {
+.profile-add, .profile-remove {
   border: 1px solid #ccc;
   display: inline-block;
   padding: 6px 12px;

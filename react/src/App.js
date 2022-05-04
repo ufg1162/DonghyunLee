@@ -6,6 +6,7 @@ import GetDate from "./component/GetDate";
 import LogIn from "./component/LogIn";
 import {getNotesAPIMethod, createNoteAPIMethod, updateNoteAPIMethod, deleteNoteByIdAPIMethod, updateUserAPIMethod, getUsersAPIMethod, auth} from './api/client';
 import {v4 as uuidv4} from 'uuid';
+import { determineRelatednessOfSentences, loadModel } from "./universalSentenceEncoder";
 
 function App() {
     const [note_list, setNote_list] = useState([]);
@@ -35,10 +36,13 @@ function App() {
     const [tags, setTags] = useState([]);
     const [show, setShow] = useState(false);
     const [LoggedIn, setLogIn] = useState(false);
+    const [showSimilar,setShowSimilar] = useState(true);
+    const [similar, setSimilar] = useState(null);
     useEffect(() => {
         auth().then(result => {
             setLogIn(result);
-        })
+        });
+        loadModel();
     }, []);
 
     useEffect(() => {
@@ -97,6 +101,15 @@ function App() {
         updateNoteAPIMethod(note);  
     }));
     const textChange = (event) => {
+        if (showSimilar === true) {
+            setShowSimilar(false);
+            if (similar) {
+                similar.map((note) => {
+                    document.getElementById(display[note.indexOne].id).style.backgroundColor = "inherit";
+                    document.getElementById(display[note.indexOne].id).lastChild.style.visibility = "hidden";
+                })
+            }
+        }
         var i = findIndex();
         const updatedNote = {...note_list[i], text: event.target.value, lastUpdatedDate: GetDate(),};
         setNote_list([...note_list.slice(0, i), updatedNote, ...note_list.slice(i + 1)]);
@@ -139,6 +152,33 @@ function App() {
 
     useEffect(() => {if (current !== '') {showNote(current)}}, [display]);
 
+    const checkSimilar = (index) => {
+        let checked = [];
+        display.map((note) => {
+            if (note.text === '') {
+                checked.push(" ");
+            }
+            else {
+                checked.push(note.text);
+            }
+        });
+        determineRelatednessOfSentences(checked, index).then((result) => {
+            if (result) {
+                setShowSimilar(true);
+                const s_notes = result.filter((note) => note.score >= 0.5);
+                setSimilar(s_notes);
+                s_notes.map((note) => {
+                    let similarNote = display[note.indexOne];
+                    if (similarNote.id !== display[index].id){
+                        document.getElementById(similarNote.id).style.backgroundColor = "rgb(209, 243, 255)";
+                        document.getElementById(similarNote.id).lastChild.style.visibility = "visible";
+                    }
+                })
+            }
+        })
+    }
+
+
     const addNote = () => {
         const note = {
             id: '',
@@ -174,6 +214,7 @@ function App() {
         const all = document.querySelectorAll(".note");
         for (let i = 0; i < all.length; i++) {
              all[i].style.backgroundColor = "inherit";
+             all[i].lastChild.style.visibility = "hidden";
         }
 
         document.getElementById(curr).style.backgroundColor = "lightblue";
@@ -186,6 +227,10 @@ function App() {
         });
         setTags(x.tags);
         setCurrent(x.id);
+        if (showSimilar === true) {
+            var i = display.indexOf(x);
+            checkSimilar(i);
+        }
         if(window.innerWidth <= 500) {
             sideRef.current.style.display = "none";
             mainRef.current.style.display = "block";
@@ -213,7 +258,7 @@ function App() {
         <div id="root-contatiner">
             {!LoggedIn && <LogIn setLogIn={setLogIn} setNote_list={setNote_list} setProfile={setProfile}/>}
             <Sidebar addNote={addNote} display={display} search={search} showNote={showNote} openModal={() => setShow(true)} 
-            sideRef={sideRef} searchRef={searchRef} profile={profile}/>
+            sideRef={sideRef} searchRef={searchRef} profile={profile} setShowSimilar={setShowSimilar} showSimilar={showSimilar}/>
             <Main showNote={showNote} note_list={note_list} deleteNote={deleteNote} current={current} tags={tags}
             handleAddition={handleAddition} handleDelete={handleDelete} handleDrag={handleDrag} textChange={textChange}
             back={back} mainRef={mainRef}/>

@@ -19,7 +19,7 @@ function Sidebar(props) {
             </div>
 
             <div className='all-notes'>
-                <AllNotes note_list={props.display} showNote={props.showNote}/>
+                <AllNotes note_list={props.display} showNote={props.showNote} setShowSimilar={props.setShowSimilar} showSimilar={props.showSimilar}/>
             </div>
         </div>
 
