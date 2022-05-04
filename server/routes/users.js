@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const {wrapAsync} = require('../utils/helper');
 const multer = require('multer');
-const { isLoggedIn } = require('../middleware/auth');
+const { isLoggedIn, isAuthorized } = require('../middleware/auth');
 const upload = multer({dest: 'uploads/'});
 
 router.get('/users', isLoggedIn, wrapAsync(async function (req, res) {
@@ -11,7 +11,7 @@ router.get('/users', isLoggedIn, wrapAsync(async function (req, res) {
     res.json(user);
 }));
 
-router.put('/users/:id', isLoggedIn, wrapAsync(async function (req, res) {
+router.put('/users/:id', isAuthorized, wrapAsync(async function (req, res) {
     const id = req.params.id;
     const {name, email, profile_img, colorScheme} = req.body;
     await User.findByIdAndUpdate(id, {name, email, profile_img, colorScheme},

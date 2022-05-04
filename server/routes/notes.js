@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Note = require('../models/note');
 const {wrapAsync} = require('../utils/helper');
-const {isLoggedIn} = require('../middleware/auth');
+const {isLoggedIn, isProperNote} = require('../middleware/auth');
 
 router.get('/notes', isLoggedIn, wrapAsync(async function (req, res) {
     let notes = await Note.find({"owner": req.session.userId});
@@ -22,7 +22,7 @@ router.post('/notes', isLoggedIn, wrapAsync(async function (req, res) {
     res.json(newNote);
 }));
 
-router.put('/notes/:id', isLoggedIn, wrapAsync(async function (req, res) {
+router.put('/notes/:id', isProperNote, wrapAsync(async function (req, res) {
     const id = req.params.id;
     const {text, lastUpdatedDate, tags} = req.body;
     await Note.findByIdAndUpdate(id, {text, lastUpdatedDate, tags}, 
@@ -30,7 +30,7 @@ router.put('/notes/:id', isLoggedIn, wrapAsync(async function (req, res) {
     res.sendStatus(204);
 }));
 
-router.delete('/notes/:id', wrapAsync(async function (req, res) {
+router.delete('/notes/:id', isProperNote, wrapAsync(async function (req, res) {
     const id = req.params.id;
     const result = await Note.findByIdAndDelete(id);
     res.json(result);

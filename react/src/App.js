@@ -56,8 +56,6 @@ function App() {
         }
     }, [LoggedIn])
 
-
-
     const findIndex = () => {
         var x;
         note_list.map((item) => {
