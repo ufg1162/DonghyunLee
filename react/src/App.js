@@ -235,6 +235,48 @@ function App() {
         }
     }
 
+    const selectNote = (id) => {
+        let curr = id;
+        let exist;
+        display.map((note) => {
+            if(note.id === id) {
+                exist = note;
+            }
+        })
+        if (exist === undefined) {
+            if (display.length !== 0) {
+                curr = display[0].id;
+            }
+            else {
+                return;
+            }
+        }
+        const all = document.querySelectorAll(".note");
+        for (let i = 0; i < all.length; i++) {
+             all[i].style.backgroundColor = "inherit";
+             all[i].lastChild.style.visibility = "hidden";
+        }
+
+        document.getElementById(curr).style.backgroundColor = "lightblue";
+        var x;
+
+        display.map((item) => {
+            if (item.id === curr) {
+                x = item;
+             }
+        });
+        setTags(x.tags);
+        setCurrent(x.id);
+        setShowSimilar(true);
+        var i = display.indexOf(x);
+        checkSimilar(i);
+        if(window.innerWidth <= 500) {
+            sideRef.current.style.display = "none";
+            mainRef.current.style.display = "block";
+        }
+    }
+    
+
     const deleteNote = () => {
         if (current !== '') {
             const newList = note_list.filter((note) => note.id !== current);
@@ -255,8 +297,8 @@ function App() {
     return(
         <div id="root-contatiner">
             {!LoggedIn && <LogIn setLogIn={setLogIn} setNote_list={setNote_list} setProfile={setProfile}/>}
-            <Sidebar addNote={addNote} display={display} search={search} showNote={showNote} openModal={() => setShow(true)} 
-            sideRef={sideRef} searchRef={searchRef} profile={profile} setShowSimilar={setShowSimilar} showSimilar={showSimilar}/>
+            <Sidebar addNote={addNote} display={display} search={search} selectNote={selectNote} openModal={() => setShow(true)} 
+            sideRef={sideRef} searchRef={searchRef} profile={profile}/>
             <Main showNote={showNote} note_list={note_list} deleteNote={deleteNote} current={current} tags={tags}
             handleAddition={handleAddition} handleDelete={handleDelete} handleDrag={handleDrag} textChange={textChange}
             back={back} mainRef={mainRef}/>

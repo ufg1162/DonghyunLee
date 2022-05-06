@@ -5,7 +5,7 @@ const Note = require('../models/note');
 const {wrapAsync} = require('../utils/helper');
 const {isLoggedIn, isProperNote} = require('../middleware/auth');
 
-router.get('/notes', isLoggedIn, wrapAsync(async function (req, res) {
+router.get('/currentnote', isLoggedIn, wrapAsync(async function (req, res) {
     let notes = await Note.find({"owner": req.session.userId});
     res.json(notes);
 }));

@@ -6,7 +6,7 @@ const multer = require('multer');
 const { isLoggedIn, isAuthorized } = require('../middleware/auth');
 const upload = multer({dest: 'uploads/'});
 
-router.get('/users', isLoggedIn, wrapAsync(async function (req, res) {
+router.get('/currentuser', isLoggedIn, wrapAsync(async function (req, res) {
     let user = await User.find({"_id": req.session.userId});
     res.json(user);
 }));

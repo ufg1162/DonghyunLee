@@ -5,7 +5,7 @@ const defaultHeaders = {
 }
 
 export const getNotesAPIMethod = () => {
-    return fetch(`/api/notes`, {
+    return fetch(`/api/currentnote`, {
         ...defaultHeaders,
     }).then(checkStatus)
         .then(parseJSON);
@@ -44,7 +44,7 @@ export const deleteNoteByIdAPIMethod = (noteId) => {
 }
 
 export const getUsersAPIMethod = () => {
-    return fetch(`/api/users`, {
+    return fetch(`/api/currentuser`, {
         ...defaultHeaders,
     }).then(checkStatus)
         .then(parseJSON);
