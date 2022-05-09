@@ -8,6 +8,8 @@ import {getNotesAPIMethod, createNoteAPIMethod, updateNoteAPIMethod, deleteNoteB
 import {v4 as uuidv4} from 'uuid';
 import { determineRelatednessOfSentences, loadModel } from "./universalSentenceEncoder";
 
+loadModel();
+
 function App() {
     const [note_list, setNote_list] = useState([]);
     const [display, setDisplay] = useState([]);
@@ -42,7 +44,6 @@ function App() {
         auth().then(result => {
             setLogIn(result);
         });
-        loadModel();
     }, []);
 
     useEffect(() => {
